@@ -103,6 +103,30 @@ public class RNShopifyModule extends ReactContextBaseJavaModule {
     });
   }
 
+  /**
+  * Return a product given its product id.
+  */
+  @ReactMethod
+  public void getProduct(double productId, final Promise promise){
+
+    buyClient.getProduct((long)productId, new Callback<Product>() {
+
+      @Override
+      public void success(Product product) {
+        try {
+          promise.resolve(convertJsonToMap(new JSONObject(product.toJsonString())));
+        } catch (JSONException e) {
+          promise.reject("", e);
+        }
+      }
+
+      @Override
+      public void failure(BuyClientError error) {
+        promise.reject("", error.getRetrofitErrorBody());
+      }
+    });
+  }
+
   @ReactMethod
   public void getProductTags(int page, final Promise promise) {
     buyClient.getProductTags(page, new Callback<List<String>>() {
@@ -233,8 +257,13 @@ public class RNShopifyModule extends ReactContextBaseJavaModule {
     try {
       String addressAsJson = convertMapToJson(addressDictionary).toString();
       Address address = fromAddressJson(addressAsJson);
+      address.setFirstName(addressDictionary.getString("firstName"));
       address.setLastName(addressDictionary.getString("lastName"));
       address.setCountryCode(addressDictionary.getString("countryCode"));
+      address.setAddress1(addressDictionary.getString("address1"));
+      address.setCity(addressDictionary.getString("city"));
+      address.setProvinceCode(addressDictionary.getString("provinceCode"));
+      address.setZip(addressDictionary.getString("zip"));
       checkout.setEmail(email);
       checkout.setShippingAddress(address);
       checkout.setBillingAddress(address);
