@@ -1,5 +1,5 @@
 #import "RNShopify.h"
-#import "Buy.h"
+#import "Buy/Buy.h"
 
 @implementation RNShopify {
     RCTPromiseResolveBlock _resolve;
@@ -40,6 +40,17 @@ RCT_EXPORT_METHOD(getCollections:(NSUInteger)page resolver:(RCTPromiseResolveBlo
         }
 
         resolve([self getDictionariesForCollections:collections]);
+    }];
+}
+
+RCT_EXPORT_METHOD(getProduct:(nonnull NSNumber *)productId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.client getProductById:productId completion:^(BUYProduct *product, NSError *error){
+        if(error){
+            return reject([NSString stringWithFormat: @"%lu", (long)error.code], error.localizedDescription, error);
+        }
+
+        resolve([product JSONDictionary]);
     }];
 }
 
