@@ -261,11 +261,46 @@ public class RNShopifyModule extends ReactContextBaseJavaModule {
       address.setLastName(addressDictionary.getString("lastName"));
       address.setCountryCode(addressDictionary.getString("countryCode"));
       address.setAddress1(addressDictionary.getString("address1"));
+      address.setAddress2(addressDictionary.getString("address2"));
       address.setCity(addressDictionary.getString("city"));
       address.setProvinceCode(addressDictionary.getString("provinceCode"));
       address.setZip(addressDictionary.getString("zip"));
       checkout.setEmail(email);
       checkout.setShippingAddress(address);
+      //checkout.setBillingAddress(address);
+    } catch (JSONException e) {
+      promise.reject("", e);
+      return;
+    }
+
+    buyClient.updateCheckout(checkout, new Callback<Checkout>() {
+
+      @Override
+      public void success(Checkout checkout) {
+        RNShopifyModule.this.checkout = checkout;
+        promise.resolve(true);
+      }
+
+      @Override
+      public void failure(BuyClientError error) {
+        promise.reject("", error.getRetrofitErrorBody());
+      }
+    });
+  }
+
+  @ReactMethod
+  public void setBillingAddress(ReadableMap addressDictionary, final Promise promise) {
+    try {
+      String addressAsJson = convertMapToJson(addressDictionary).toString();
+      Address address = fromAddressJson(addressAsJson);
+      address.setFirstName(addressDictionary.getString("firstName"));
+      address.setLastName(addressDictionary.getString("lastName"));
+      address.setCountryCode(addressDictionary.getString("countryCode"));
+      address.setAddress1(addressDictionary.getString("address1"));
+      address.setAddress2(addressDictionary.getString("address2"));
+      address.setCity(addressDictionary.getString("city"));
+      address.setProvinceCode(addressDictionary.getString("provinceCode"));
+      address.setZip(addressDictionary.getString("zip"));
       checkout.setBillingAddress(address);
     } catch (JSONException e) {
       promise.reject("", e);

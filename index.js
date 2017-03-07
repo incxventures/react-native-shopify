@@ -30,7 +30,7 @@ export default {
       .catch((error) => {
         throw new Error(getCheckoutError(error.message));
       });
-  },
+  }
 };
 
 /**

@@ -139,8 +139,26 @@ RCT_EXPORT_METHOD(setCustomerInformation:(NSString *)email address:(NSDictionary
 {
     BUYAddress *address = [self.client.modelManager insertAddressWithJSONDictionary:addressDictionary];
     self.checkout.shippingAddress = address;
-    self.checkout.billingAddress = address;
+    //self.checkout.billingAddress = address;
     self.checkout.email = email;
+
+    [self.client updateCheckout:self.checkout completion:^(BUYCheckout *checkout, NSError *error) {
+        if (error) {
+            return reject([NSString stringWithFormat: @"%lu", (long)error.code],
+                [self getJsonFromError:error], error);
+        }
+
+        self.checkout = checkout;
+        resolve(@YES);
+    }];
+}
+
+RCT_EXPORT_METHOD(setBillingAddress:(NSDictionary *)addressDictionary
+                resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    BUYAddress *address = [self.client.modelManager insertAddressWithJSONDictionary:addressDictionary];
+    //self.checkout.shippingAddress = address;
+    self.checkout.billingAddress = address;
 
     [self.client updateCheckout:self.checkout completion:^(BUYCheckout *checkout, NSError *error) {
         if (error) {
