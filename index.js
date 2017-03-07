@@ -16,19 +16,29 @@ export default {
   checkout: (cart) => {
     return RNShopify.checkout(cart)
       .catch((error) => {
-        throw new Error(getCheckoutError(error.message, cart));
+        return Promise.reject(getCheckoutError(error.message, cart));
+        //throw new Error(getCheckoutError(error.message, cart));
       });
   },
   setCustomerInformation: (email, customer) => {
     return RNShopify.setCustomerInformation(email, customer)
       .catch((error) => {
-        throw new Error(getCheckoutError(error.message));
+        return Promise.reject(getCheckoutError(error.message));
+        //throw new Error(getCheckoutError(error.message));
+      });
+  },
+  setBillingAddress: (address) => {
+    return RNShopify.setBillingAddress(address)
+      .catch((error) => {
+        return Promise.reject(getCheckoutError(error.message));
+        //throw new Error(getCheckoutError(error.message));
       });
   },
   completeCheckout: (creditCard) => {
     return RNShopify.completeCheckout(creditCard)
       .catch((error) => {
-        throw new Error(getCheckoutError(error.message));
+        return Promise.reject(getCheckoutError(error.message));
+        //throw new Error(getCheckoutError(error.message));
       });
   }
 };
