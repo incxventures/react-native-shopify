@@ -1,5 +1,5 @@
-#import "<React/RCTBridgeModule.h>"
-#import "Buy.h"
+#import <React/RCTBridgeModule.h>
+#import "Buy/Buy.h"
 
 @interface RNShopify : UIViewController <RCTBridgeModule, BUYPaymentProviderDelegate>
 
@@ -9,4 +9,3 @@
 @property (nonatomic, strong) NSArray *availableShippingRates;
 
 @end
-
