@@ -139,7 +139,7 @@ RCT_EXPORT_METHOD(setCustomerInformation:(NSString *)email address:(NSDictionary
 {
     BUYAddress *address = [self.client.modelManager insertAddressWithJSONDictionary:addressDictionary];
     self.checkout.shippingAddress = address;
-    //self.checkout.billingAddress = address;
+    self.checkout.billingAddress = address;
     self.checkout.email = email;
 
     [self.client updateCheckout:self.checkout completion:^(BUYCheckout *checkout, NSError *error) {

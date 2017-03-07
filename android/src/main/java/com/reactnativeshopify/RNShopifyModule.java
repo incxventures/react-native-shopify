@@ -267,7 +267,7 @@ public class RNShopifyModule extends ReactContextBaseJavaModule {
       address.setZip(addressDictionary.getString("zip"));
       checkout.setEmail(email);
       checkout.setShippingAddress(address);
-      //checkout.setBillingAddress(address);
+      checkout.setBillingAddress(address);
     } catch (JSONException e) {
       promise.reject("", e);
       return;
